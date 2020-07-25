@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-struct CollisionInfo {
+[System.Serializable]
+public struct CollisionInfo {
     public bool top;
     public bool bot;
     public bool left;
     public bool right;
+
+    public bool climbingSlope;
 
     public void Reset() {
         top   = false;
         bot   = false;
         left  = false;
         right = false;
-    }
-
-    public bool IsGrouded() {
-        return bot;
-    }
-
-    public bool IsByWall() {
-        return left || right;
+        climbingSlope = false;
     }
 }
 
@@ -30,6 +26,25 @@ public class RaycastCharacter : MonoBehaviour
 
     public int rayCount = 5;
     public LayerMask platformMask;
+
+    [Space]
+    public float moveSpeed;
+    public float acceleration;
+    [Range(0, 90)]
+    public float maxClimbAngle;
+    public float jumpHeight;
+    public float jumpTime;
+
+    [Space]
+    public float wallSlideSpeed;
+    public Vector2 wallClimbVelocity;
+    public Vector2 wallLeapVelocity;
+
+    [Space]
+    public float dashDistance;
+    public float dashTime;
+
+    public CollisionInfo collisionInfo;
 
     new Collider2D collider;
     Bounds bounds;
@@ -44,11 +59,24 @@ public class RaycastCharacter : MonoBehaviour
     float horizontalStep;
     float verticalStep;
 
-    CollisionInfo collisionInfo;
+    float gravity;
+    float jumpVelocity;
+
+    float dashVelocity;
+    float timeLeftIndash;
+    float dashDir;
+    bool dashing;
+
+    float velocityXSmoothing;
 
     void Awake() {
         collider = GetComponent<Collider2D>();
         bounds = collider.bounds;
+
+        gravity = -(2 * jumpHeight) / (jumpTime * jumpTime);
+        jumpVelocity = -gravity * jumpTime;
+
+        dashVelocity = dashDistance / dashTime;
     }
 
     void UpdateBounds() {
@@ -74,47 +102,93 @@ public class RaycastCharacter : MonoBehaviour
 
     void Update() {
         UpdateBounds();
+        var horizontal = Input.GetAxisRaw("Horizontal");
+        var jump       = Input.GetButtonDown("Jump");
+        var dash       = Input.GetButtonDown("Dash");
 
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        velocity.y += gravity * Time.deltaTime;
 
-            if(collisionInfo.IsGrouded()) {
-                velocity.y = 10f;
+        bool wallSliding = false;
+        if((collisionInfo.left || collisionInfo.right) && !collisionInfo.bot) {
+            velocity.y = -Mathf.Min(-velocity.y, wallSlideSpeed);
+            wallSliding = true;
+        }
+
+        var wallDir = collisionInfo.left ? -1 : 1;
+        if(jump) {
+            if(wallSliding) {
+                if(horizontal == wallDir) velocity = wallClimbVelocity;
+                else                      velocity = wallLeapVelocity;
+
+                velocity.x *= -wallDir;
             }
-            else if(collisionInfo.IsByWall()) {
-                velocity.x += collisionInfo.left ? 5 : -5;
+            else if(collisionInfo.bot) {
+                velocity.y = jumpVelocity;
             }
         }
 
-        velocity += Physics2D.gravity * Time.deltaTime;
+        float targetVelocityX = horizontal * moveSpeed;
+        velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, acceleration);
 
-        var horizontal = Input.GetAxisRaw("Horizontal");
-        velocity.x = horizontal * 5;
+        if(timeLeftIndash > 0) {
+            timeLeftIndash -= Time.deltaTime;
+            if(timeLeftIndash < 0) {
+                dashing = false;
+            }
+
+            velocity.y = 0;
+            velocity.x = dashVelocity * dashDir;
+        }
+
+        if(dash && !dashing) {
+            dashing = true;
+            dashDir = horizontal;
+
+            timeLeftIndash = dashTime;
+        }
 
         collisionInfo.Reset();
 
-        MoveHorizontal();
-        MoveVertical();
+        var vel = velocity * Time.deltaTime;
+        MoveHorizontal(ref vel);
 
-        transform.Translate(velocity * Time.deltaTime);
+        if(velocity.y != 0) {
+            MoveVertical(ref vel);
+        }
+
+        if(collisionInfo.top || collisionInfo.bot) {
+            velocity.y = 0;
+        }
+
+        transform.Translate(vel);
     }
 
-    void MoveHorizontal() {
+    void ClimbSlopes(float slopeAngle, ref Vector2 vel) {
+        var moveX = vel.x * Time.deltaTime;
+        vel.y = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveX;
+        vel.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveX * Mathf.Sign(vel.x);
+
+        collisionInfo.bot = true;
+        collisionInfo.climbingSlope = true;
+    }
+
+    void MoveHorizontal(ref Vector2 vel) {
         var t = Time.deltaTime;
 
-        var dir = Mathf.Sign(velocity.x);
+        var dir = Mathf.Sign(vel.x);
 
-        float rayLength = Mathf.Abs(velocity.x) * t + skinWidth;
+        float rayLength = Mathf.Abs(vel.x) + skinWidth;
         var rayOrigin = dir == 1 ? botRight : botLeft;
         var rayDirection = new Vector2(dir, 0);
 
         for(int i = 0; i < rayCount; i++) {
 
-            Debug.DrawRay(rayOrigin, rayDirection * rayLength * 2, Color.red);
+            Debug.DrawRay(rayOrigin, rayDirection * rayLength * 10, Color.red);
 
             var hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, platformMask);
             if(hit) {
                 rayLength  = hit.distance;
-                velocity.x = (hit.distance - skinWidth) * dir;
+                vel.x = (hit.distance - skinWidth) * dir;
 
                 if(dir == 1) {
                     collisionInfo.right = true;
@@ -122,29 +196,39 @@ public class RaycastCharacter : MonoBehaviour
                 else {
                     collisionInfo.left = true;
                 }
+
+                // float angle = Vector2.Angle(Vector2.up, hit.normal);
+                // if(i == 0 && angle < maxClimbAngle) {
+                //     var distToSlope = hit.distance - skinWidth;
+                //     //vel.x -= distToSlope * dir;
+
+                //     ClimbSlopes(angle, ref vel);
+                //     // vel.x += distToSlope * dir;
+                //     break;
+                // }
             }
 
             rayOrigin.y += verticalStep;
         }
     }
 
-    void MoveVertical() {
+    void MoveVertical(ref Vector2 vel) {
         var t = Time.deltaTime;
 
-        var dir = Mathf.Sign(velocity.y);
+        var dir = Mathf.Sign(vel.y);
 
-        float rayLength = Mathf.Abs(velocity.y) * t + skinWidth;
+        float rayLength = Mathf.Abs(vel.y) * t + skinWidth;
         var rayOrigin = dir == 1 ? topLeft : botLeft;
         var rayDirection = new Vector2(0, dir);
 
         for(int i = 0; i < rayCount; i++) {
 
-            Debug.DrawRay(rayOrigin, rayDirection * rayLength * 2, Color.red);
+            Debug.DrawRay(rayOrigin, rayDirection * rayLength * 10, Color.red);
 
             var hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, platformMask);
             if(hit) {
                 rayLength  = hit.distance;
-                velocity.y = (hit.distance - skinWidth) * dir;
+                vel.y = (hit.distance - skinWidth) * dir;
 
                 if(dir == 1) {
                     collisionInfo.top = true;

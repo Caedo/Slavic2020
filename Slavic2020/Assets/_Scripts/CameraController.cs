@@ -7,11 +7,12 @@ public class CameraController : MonoBehaviour
     public Transform target;
 
     public Vector2 focusBoxSize;
-    
-    
+
     Vector2 focusBoxPosition;
 
     void LateUpdate() {
+        if(target == null) return;
+
         var left  = focusBoxPosition.x - focusBoxSize.x / 2f;
         var right = focusBoxPosition.x + focusBoxSize.x / 2f;
         var top   = focusBoxPosition.y + focusBoxSize.y / 2f;

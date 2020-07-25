@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1660e0a141f34848aa6f2a4808761f4, type: 3}
   m_Name: New Circle Bullets Sequence
   m_EditorClassIdentifier: 
-  isFinished: 0
+  isFinished: 1
   bulletPrefab: {fileID: 3211376154807386793, guid: 6b09b9e96c0365342aa1c0a12bae3a65,
     type: 3}
   bulletSpeed: 10
   bulletsCount: 12
+  prepareTime: 1.5
+  prepareDistance: 2

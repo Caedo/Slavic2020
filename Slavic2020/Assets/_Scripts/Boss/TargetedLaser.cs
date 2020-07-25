@@ -22,6 +22,8 @@ public class TargetedLaser : BossAttack
     Vector3 targetDir;
 
     public void Initialize(CharacterEntity player) {
+        if(player == null) return;
+
         var playerPos = player.transform.position;
         targetDir = (playerPos - transform.position).normalized;
 

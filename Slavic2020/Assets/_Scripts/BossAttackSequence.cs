@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class BossAttackSequence : ScriptableObject {
 
+    [System.NonSerialized]
     public bool isFinished;
 
     public void StartSequence(CharacterEntity player, BossController boss) {

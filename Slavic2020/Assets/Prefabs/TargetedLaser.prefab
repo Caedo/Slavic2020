@@ -49,7 +49,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 8e832d50fd8d1be42ac141e1293f4107, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,8 +93,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0.93945074, b: 1, a: 1}
-      key1: {r: 0, g: 1, b: 0.98099947, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -176,14 +176,17 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 512
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 0
   pointsValue: 1
-  timeToStart: 0.5
+  timeToStart: 0.75
   transitionTime: 0.2
   attackTime: 1
   startWidth: 0.05
-  attackWidth: 0.8
+  attackWidth: 0.7
   closeStartWidth: 0.05
-  closeEndWidth: 1
+  closeEndWidth: 1.75
   line: {fileID: 7591851966353619443}
   closeLine: {fileID: 3309713259863371733}
 --- !u!1 &8710332210021574978

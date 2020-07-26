@@ -6,6 +6,9 @@ public class BossBullet : BossAttack
 {
     public Transform gfxTransform;
 
+    public Transform killCircleGfx;
+    public Transform closeCircleGfx;
+
     public float rotationSpeed;
 
     [Space]
@@ -15,6 +18,11 @@ public class BossBullet : BossAttack
     float moveSpeed;
 
     bool fired = false;
+
+    void Start() {
+        killCircleGfx.localScale  = Vector2.one * killCircleRadius * 2;
+        closeCircleGfx.localScale = Vector2.one * closeCircleRadius * 2;
+    }
 
     void Update() {
         gfxTransform.Rotate(0, 0, Time.deltaTime * rotationSpeed);
@@ -37,5 +45,11 @@ public class BossBullet : BossAttack
     public void Fire(float speed) {
         fired = true;
         moveSpeed = speed;
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if(fired && other.gameObject.CompareTag("Platform")) {
+            Destroy(gameObject);
+        }
     }
 }

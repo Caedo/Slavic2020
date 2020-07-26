@@ -37,13 +37,14 @@ public class BossController : MonoBehaviour
 
     IEnumerator AttacksRoutine() {
         while(player) {
+            yield return new WaitForSeconds(attacksInterval);
+
             var index = Random.Range(0, attacks.Length);
             var attack = attacks[index];
 
             attack.StartSequence(player, this);
 
             yield return new WaitUntil(() => attack.isFinished);
-            yield return new WaitForSeconds(attacksInterval);
         }
     }
 

@@ -5,6 +5,8 @@ using UnityEngine;
 public abstract class BossAttack : MonoBehaviour
 {
     public LayerMask playerMask;
+    public LayerMask platformLayer;
+
     public int pointsValue;
 
     public void OverlapCircle(float killRadius, float closeRadius) {
@@ -43,5 +45,4 @@ public abstract class BossAttack : MonoBehaviour
             }
         }
     }
-    
 }

@@ -67,6 +67,8 @@ public class RaycastCharacter : MonoBehaviour
     float dashDir;
     bool dashing;
 
+    bool doubleJumpAvaible;
+
     float velocityXSmoothing;
 
     void Awake() {
@@ -125,6 +127,10 @@ public class RaycastCharacter : MonoBehaviour
             else if(collisionInfo.bot) {
                 velocity.y = jumpVelocity;
             }
+            else if(doubleJumpAvaible) {
+                velocity.y = jumpVelocity;
+                doubleJumpAvaible = false;
+            }
         }
 
         float targetVelocityX = horizontal * moveSpeed;
@@ -154,6 +160,10 @@ public class RaycastCharacter : MonoBehaviour
 
         if(velocity.y != 0) {
             MoveVertical(ref vel);
+        }
+
+        if(collisionInfo.bot) {
+            doubleJumpAvaible = true;
         }
 
         if(collisionInfo.top || collisionInfo.bot) {

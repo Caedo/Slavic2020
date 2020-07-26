@@ -11,6 +11,8 @@ public class GameUIController : MonoBehaviour {
     public FloatVariable bossMaxHp;
     public FloatVariable bossCurrentHp;
     public FloatVariable playerPoints;
+
+    public FloatVariable playerMaxEnergy;
     public FloatVariable playerEnergy;
 
     [Space]
@@ -23,6 +25,10 @@ public class GameUIController : MonoBehaviour {
     }
 
     public void BossHpChanged() {
-        bossHpImage.fillAmount = bossCurrentHp.Value / bossMaxHp.Value; 
+        bossHpImage.fillAmount = bossCurrentHp.Value / bossMaxHp.Value;
+    }
+
+    public void PlayerEnergyChanged() {
+        playerEnergyImage.fillAmount = playerEnergy.Value / playerMaxEnergy.Value;
     }
 }

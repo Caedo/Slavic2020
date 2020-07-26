@@ -9,6 +9,11 @@ public class CameraController : MonoBehaviour
     public Vector2 focusBoxSize;
 
     Vector2 focusBoxPosition;
+    float posZ;
+
+    void Awake() {
+        posZ = transform.position.z;
+    }
 
     void LateUpdate() {
         if(target == null) return;
@@ -34,7 +39,7 @@ public class CameraController : MonoBehaviour
             focusBoxPosition.y = pos.y + focusBoxSize.y / 2f;
         }
 
-        transform.position = new Vector3(focusBoxPosition.x, focusBoxPosition.y, -10);
+        transform.position = new Vector3(focusBoxPosition.x, focusBoxPosition.y, posZ);
     }
 
     void OnDrawGizmos() {

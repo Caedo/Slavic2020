@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182987935785444976}
-  m_LocalRotation: {x: -0.35135603, y: -0.5403678, z: -0.26469737, w: 0.71727747}
+  m_LocalRotation: {x: 0.27059805, y: 0.6532815, z: -0.27059805, w: 0.6532815}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 182987936329433910}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -52.196003, y: -73.986, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 90, z: 0}
 --- !u!198 &182987935785445006
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -746,7 +746,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 1.49
+      value: 2.48
       mode: 0
       spread: 0
       speed:
@@ -4718,7 +4718,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b7ccaa5d98e9f7a4c901d0008ad79e6d, type: 2}
+  - {fileID: 2100000, guid: f7ebbfeb7e44e70488c36e95bd3976d7, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -4788,13 +4788,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182987935873938874}
-  m_LocalRotation: {x: 0.13979402, y: -0.6292108, z: 0.3267781, w: 0.69120723}
+  m_LocalRotation: {x: -0.61468923, y: 0.34950995, z: -0.18751003, w: 0.6817917}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 182987936329433910}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 37.191, y: -77.744, z: 20.258001}
+  m_LocalEulerAnglesHint: {x: -45.000004, y: 90.00001, z: -75.755005}
 --- !u!198 &182987935873938871
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5509,7 +5509,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 1.49
+      value: 2.48
       mode: 0
       spread: 0
       speed:
@@ -9481,7 +9481,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b7ccaa5d98e9f7a4c901d0008ad79e6d, type: 2}
+  - {fileID: 2100000, guid: f7ebbfeb7e44e70488c36e95bd3976d7, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -9554,7 +9554,7 @@ Transform:
   m_GameObject: {fileID: 182987936329433914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 182987935785445005}
   - {fileID: 182987935873938873}
@@ -9587,7 +9587,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7a4e5f23735d4f54e95a85ca56c35d36, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9621,6 +9621,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelBounds: {fileID: 0}
+  moveSpeed: 1
   player: {fileID: 0}
   attacksInterval: 0
   attacks: []
+  maxBossHp: {fileID: 0}
+  currentBossHp: {fileID: 0}
+  bossHpChangedEvent: {fileID: 0}

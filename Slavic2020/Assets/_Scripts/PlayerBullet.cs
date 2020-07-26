@@ -17,8 +17,6 @@ public class PlayerBullet : MonoBehaviour {
             boss.Damage(damage);
         }
 
-        print(other.name);
-
         Destroy(gameObject);
     }
 }

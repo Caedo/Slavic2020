@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameOverScreen : MonoBehaviour {
 
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Return)) {
+        if(Input.GetKeyDown(KeyCode.Space)) {
             Restart();
         }
     }
